@@ -1,0 +1,15 @@
+{
+    "name": "cocomc/salon",
+    "autoload": {
+        "psr-4": {
+            "Cocomc\\Salon\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "corentinthibaud",
+            "email": "corentin.thibaud@isen.yncrea.fr"
+        }
+    ],
+    "require": {}
+}
