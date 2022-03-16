@@ -6,24 +6,49 @@ try {
 }
 
 if (isset($_POST['submit'])) {
-    if(isset($_POST['surname']) && !empty($_POST['surname']) && isset($_POST['name']) && !empty($_POST['name']) && isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['curriculum']) && !empty($_POST['curriculum']) && isset($_POST['curriculums_1']) && !empty($_POST['curriculums_1'])) {
+    if(isset($_POST['surname']) && !empty($_POST['surname']) && isset($_POST['name']) && !empty($_POST['name']) && isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['curriculum']) && !empty($_POST['curriculum'])) {
         $surname = htmlspecialchars($_POST['surname']);
         $name = htmlspecialchars($_POST['name']);
         $email = htmlspecialchars($_POST['email']);
         $phone = htmlspecialchars($_POST['phone']);
         $curriculum = htmlspecialchars($_POST['curriculum']);
-        $curriculums_1 = htmlspecialchars($_POST['curriculums_1']);
-        $curriculums_2 = htmlspecialchars($_POST['curriculums_2']);
-
-        if($curriculum == 0) {
+        $wish = "";
+        if (isset($_POST['cin']) && $_POST['cin'] == 'cin') {
+            $wish .= $_POST['cin'] . ";";
+        }
+        if (isset($_POST['csi']) && $_POST['csi'] == 'csi') {
+            $wish .= $_POST['csi'] . ";";
+        }
+        if (isset($_POST['biost']) && $_POST['biost'] == 'biost') {
+            $wish .= $_POST['biost'] . ";";
+        }
+        if (isset($_POST['fise']) && $_POST['fise'] == 'fise') {
+            $wish .= $_POST['fise'] . ";";
+        }
+        if (isset($_POST['fisa']) && $_POST['fisa'] == 'fisa') {
+            $wish .= $_POST['fisa'] . ";";
+        }
+        if (isset($_POST['b_green']) && $_POST['b_green'] == 'b_green') {
+            $wish .= $_POST['b_green'] . ";";
+        }
+        if (isset($_POST['b_gaming']) && $_POST['b_gaming'] == 'b_gaming') {
+            $wish .= $_POST['b_gaming'] . ";";
+        }
+        if (isset($_POST['mastere']) && $_POST['mastere'] == 'mastere') {
+            $wish .= $_POST['mastere'] . ";";
+        }
+        
+        if (empty($wish)) {
+            $error = "Tu dois choisir au moins une formation souhaitée.";
+        } else if($curriculum == 0) {
             $error = "Ta formation actuelle n'a pas été renseignée.";
         }
         elseif ($curriculums_1 == 0) {
             $error = "Ta formation souhaitée n°1 n'a pas été renseignée.";
         } else {
             try {
-                $sql = $bdd->prepare("INSERT INTO contacts(`nom`, `prenom`, `mail`, `telephone`, `for_act`, `for_fut_1`, `for_fut_2`) VALUES (?,?,?,?,?,?,?)");
-                $sql->execute(array($surname, $name, $email, $phone, $curriculum, $curriculums_1, $curriculums_2));
+                $sql = $bdd->prepare("INSERT INTO contacts(`nom`, `prenom`, `mail`, `telephone`, `for_act`, `for_fut`) VALUES (?,?,?,?,?,?)");
+                $sql->execute(array($surname, $name, $email, $phone, $curriculum, $wish));
             } catch (PDOException $e) {
                 throw new Exception($e->getCode(). ": " . $e->getMessage());
             }
@@ -124,31 +149,41 @@ if(isset($message)) { ?>
                         <option value="4">Première</option>
                         <option value="5">Seconde</option>
                         <option value="6">Collège</option>
-                    </select>
-                    <label for="formations_1">Formation souhaitée n°1 *</label>
-                    <select name="curriculums_1" id="formations_1" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" required>
-                        <option value="0">Choisir une formation</option>
-                        <option value="1">Prépa Intégrée CIN</option>
-                        <option value="2">Prépa Intégrée BIOST</option>
-                        <option value="3">Prépa CPGE</option>
-                        <option value="4">Prépa Rebond CPGE</option>
-                        <option value="5">Bachelor Gaming</option>
-                        <option value="6">Bachelor E-Santé</option>
-                        <option value="7">Formation Ingénieur (Classique)</option>
-                        <option value="8">Formation ITII (Alternance)</option>
-                    </select>
-                    <label for="formations_2">Formation souhaitée n°2</label>
-                    <select name="curriculums_2" id="formations_2" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                        <option value="0">Choisir une formation</option>
-                        <option value="1">Prépa Intégrée CIN</option>
-                        <option value="2">Prépa Intégrée BIOST</option>
-                        <option value="3">Prépa CPGE</option>
-                        <option value="4">Prépa Rebond CPGE</option>
-                        <option value="5">Bachelor Gaming</option>
-                        <option value="6">Bachelor E-Santé</option>
-                        <option value="7">Formation Ingénieur (Classique)</option>
-                        <option value="8">Formation ITII (Alternance)</option>
                     </select><br>
+                    <h5>Les formations qui t'intéressent:</h5><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="cin" id="cin" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="cin">
+                        <label for"cin" class="text-sm font-medium text-gray-900 ml-2 block">CIN</label>
+                    </div><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="csi" id="csi" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="csi">
+                        <label for"csi" class="text-sm font-medium text-gray-900 ml-2 block">MPSI / PSI</label>
+                    </div><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="biost" id="biost" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="biost">
+                        <label for"biost" class="text-sm font-medium text-gray-900 ml-2 block">BIOST</label>
+                    </div><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="gise" id="inge" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="fise">
+                        <label for"inge" class="text-sm font-medium text-gray-900 ml-2 block">Cycle Ingénieur</label>
+                    </div><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="fisa" id="fisa" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="fisa">
+                        <label for"fisa" class="text-sm font-medium text-gray-900 ml-2 block">Alternance</label>
+                    </div><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="b_green" id="green" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="b_green">
+                        <label for"green" class="text-sm font-medium text-gray-900 ml-2 block">Bachelor GreenTech</label>
+                    </div><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="b_gaming" id="gaming" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="b_gaming">
+                        <label for"gaming" class="text-sm font-medium text-gray-900 ml-2 block">Bachelor Gaming</label>
+                    </div><br>
+                    <div class="flex items-center mb-4">
+                        <input type="radio" name="mastere" id="mastere" class="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300" value="mastere">
+                        <label for"mastere" class="text-sm font-medium text-gray-900 ml-2 block">Mastère</label>
+                    </div>
+                    <br><br>
 
                     <input type="submit" value="S'inscrire" name="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                     <input type="reset" value="Effacer le formulaire" name="reset" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-red bg-white-600 hover:bg-white-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
