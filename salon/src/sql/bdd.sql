@@ -9,8 +9,7 @@ CREATE TABLE contacts(
     mail VARCHAR(255) NOT NULL,
     telephone BIGINT,
     for_act INT NOT NULL,
-    for_fut_1 INT NOT NULL,
-    for_fut_2 INT,
+    for_fut VARCHAR(20) NOT NULL,
     PRIMARY KEY(id)
 );
 
